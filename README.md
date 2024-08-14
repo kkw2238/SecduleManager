@@ -2,7 +2,7 @@
 
  
 ## 📌ERD
-![Untitled](https://github.com/user-attachments/assets/553d71f1-48fe-4da7-88a0-8c0b4c6fe0b0)
+[![Untitled](https://github.com/user-attachments/assets/553d71f1-48fe-4da7-88a0-8c0b4c6fe0b0)](https://github.com/kkw2238/)
 
  |이름|타입|제약조건|설명|
 |:------|:---|:---|:---|

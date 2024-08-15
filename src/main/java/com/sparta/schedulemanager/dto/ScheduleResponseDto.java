@@ -8,14 +8,14 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class ScheduleResponseDto {
-    private int scheduleId;
+    private int id;
     private String todo;
     private String managerName;
     private String editTime;
     private String createTime;
 
     public ScheduleResponseDto(Schedule schedule) {
-        this.scheduleId = schedule.getScheduleId();
+        this.id = schedule.getId();
         this.todo = schedule.getTodo();
         this.managerName = schedule.getManagerName();
         this.editTime = schedule.getEditTime();

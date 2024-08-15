@@ -6,8 +6,10 @@ import com.sparta.schedulemanager.entity.Schedule;
 import com.sparta.schedulemanager.repository.ScheduleRepository;
 import com.sparta.schedulemanager.secure.SHA256;
 import com.sparta.schedulemanager.service.ScheduleService;
+import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.security.NoSuchAlgorithmException;
 
@@ -32,18 +34,27 @@ public class ScheduleController {
         try {
             // 비밀번호 원본을 저장하지 않기 위해 SHA256형태로 암호화 작업
             schedule.encryptPassword(new SHA256());
+            scheduleService.addSchedule(jdbcTemplate, schedule);
         } catch (NoSuchAlgorithmException algorithmException) {
             System.out.println("No such algorithm");
             return null;
+        } catch (IllegalAccessException illegalAccessException) {
+            System.out.println("Class Error");
         }
 
-        scheduleService.addSchedule(jdbcTemplate, schedule);
         return new ScheduleResponseDto(schedule);
     }
 
+    // Schedule ID를 조회하는 함수
     @GetMapping("/schedules/{scheduleId}")
     public ScheduleResponseDto getSchedule(@PathVariable Integer scheduleId) {
-        return null;
+        Schedule schedule = scheduleService.getScheduleById(jdbcTemplate, scheduleId);
+
+        if(schedule == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Schedule not found");
+        }
+
+        return new ScheduleResponseDto(schedule);
     }
 
     @GetMapping("/schedules")

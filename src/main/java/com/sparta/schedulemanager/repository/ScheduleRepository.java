@@ -1,6 +1,8 @@
 package com.sparta.schedulemanager.repository;
 
+import com.sparta.schedulemanager.entity.CustomEntity;
 import com.sparta.schedulemanager.entity.Schedule;
+import com.sparta.schedulemanager.utility.QueryUtility;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
@@ -9,31 +11,40 @@ import java.sql.PreparedStatement;
 import java.util.Date;
 import java.util.Objects;
 
-public class ScheduleRepository {
-    private final String SAVE_QUERY = "INSERT INTO schedule (todo, managername, password, edittime, createtime) VALUES (?, ?, ?, ?, ?)";
+public class ScheduleRepository<T extends CustomEntity> {
+    private QueryUtility queryUtility;
 
-    public void saveSchedule(JdbcTemplate jdbcTemplate, Schedule schedule) {
-        KeyHolder keyHolder = new GeneratedKeyHolder();
-
-        jdbcTemplate.update(con-> {
-            PreparedStatement preparedStatement = con.prepareStatement(SAVE_QUERY,
-                    PreparedStatement.RETURN_GENERATED_KEYS);
-
-            preparedStatement.setString(1, schedule.getTodo());
-            preparedStatement.setString(2, schedule.getManagerName());
-            preparedStatement.setString(3, schedule.getPassword());
-            preparedStatement.setString(4, schedule.getEditTime());
-            preparedStatement.setString(5, schedule.getCreateTime());
-
-            return preparedStatement;
-        }, keyHolder);
-
-        int id = Objects.requireNonNull(keyHolder.getKey()).intValue();
-        schedule.setScheduleId(id);
+    public ScheduleRepository() {
+        queryUtility = new QueryUtility();
     }
 
-    public Schedule getSchedule(JdbcTemplate jdbcTemplate, Integer id) {
-        return null;
+    // 데이터를 저장하는 메서드
+    public void saveData(JdbcTemplate jdbcTemplate, String table, T data) throws IllegalAccessException {
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        String saveQuery = queryUtility.getInsertQuery(table, data, "id");
+
+        jdbcTemplate.update(con-> con.prepareStatement(saveQuery, PreparedStatement.RETURN_GENERATED_KEYS), keyHolder);
+
+        int id = Objects.requireNonNull(keyHolder.getKey()).intValue();
+        data.setId(id);
+    }
+
+    // Schedule ID에 대한 정보를 조회하는 함수
+    public Schedule getScheduleById(JdbcTemplate jdbcTemplate, String table, Integer id) {
+        return findScheduleById(jdbcTemplate, table, id);
+    }
+
+    // ID정보를 토대로 DataBase 조회하는 함수
+    public Schedule findScheduleById(JdbcTemplate jdbcTemplate, String table, Integer id) {
+        String getQuery = queryUtility.getGetByColumnDataQuery(table, "id", String.valueOf(id));
+
+        return jdbcTemplate.query(getQuery, resultSet-> {
+            if(resultSet.next()) {
+                return new Schedule(resultSet);
+            } else {
+                return null;
+            }
+        });
     }
 
     public Schedule getSchedules(JdbcTemplate jdbcTemplate, Date dateTime) {

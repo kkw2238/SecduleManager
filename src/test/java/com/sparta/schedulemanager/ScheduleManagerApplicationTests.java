@@ -1,10 +1,10 @@
-package com.sparta.secdulemanager;
+package com.sparta.schedulemanager;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class SecduleManagerApplicationTests {
+class ScheduleManagerApplicationTests {
 
 	@Test
 	void contextLoads() {

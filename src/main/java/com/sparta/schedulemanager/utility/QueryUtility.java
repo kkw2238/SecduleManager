@@ -1,7 +1,6 @@
 package com.sparta.schedulemanager.utility;
 
 import java.lang.reflect.Field;
-import java.util.Date;
 
 // Query에 대한 Utility를 담당하는 Class
 public class QueryUtility<T> {
@@ -39,5 +38,29 @@ public class QueryUtility<T> {
     // 특정 시간대의 데이터를 조회하는 쿼리를 반환해주는 함수
     public String getGetByColumnDateQuery(String table, String columnName, String columnDate)  {
         return "SELECT * FROM " + table + " WHERE " + "DATE(" + columnName + ") = '" + columnDate + "'";
+    }
+
+    // 업데이트 쿼리문을 반환해주는 함수
+    public String getUpdateQuery(String table, String[] fieldNames, T data, Integer id) throws IllegalAccessException, NoSuchFieldException {
+        StringBuilder query = new StringBuilder("UPDATE " + table + " SET ");
+
+        Class<?> clazz = data.getClass();
+
+        // SET 쿼리에 사용할 내용을 컬럼명 = "데이터" 형태로 만들어주는 함수
+        for (String fieldName : fieldNames) {
+            Field field = clazz.getDeclaredField(fieldName);
+            field.setAccessible(true);
+            query.append(fieldName).append(" = \"").append(field.get(data)).append("\", ");
+        }
+
+        query.deleteCharAt(query.length() - 2);
+        query.append(" WHERE id = ").append(id);
+
+        return query.toString();
+    }
+
+    // 삭제 해주는 Query를 생성해주는 함수
+    public String getDeleteByColumnDataQuery(String table, String columnName, String columnData) {
+        return "DELETE FROM " + table + " WHERE " + columnName + " = \"" + columnData + "\"";
     }
 }

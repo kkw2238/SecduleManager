@@ -1,7 +1,6 @@
 package com.sparta.schedulemanager.dto;
 
 import com.sparta.schedulemanager.entity.Schedule;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

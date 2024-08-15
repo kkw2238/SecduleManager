@@ -40,6 +40,12 @@ public class Schedule extends CustomEntity {
         this.createTime = rs.getString("createtime");
     }
 
+    public void editSchedule(Schedule schedule) {
+        this.todo = schedule.getTodo();
+        this.editTime = schedule.getEditTime();
+        this.managerName = schedule.getManagerName();
+    }
+
     // 비밀번호를 암호화 하는 함수
     public void encryptPassword(SecureAlgorithm secureAlgorithm) throws NoSuchAlgorithmException {
         this.password = secureAlgorithm.encrypt(this.password);

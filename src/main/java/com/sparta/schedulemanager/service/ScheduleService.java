@@ -1,7 +1,9 @@
 package com.sparta.schedulemanager.service;
 
 import com.sparta.schedulemanager.entity.Schedule;
+import com.sparta.schedulemanager.exception.CustomException;
 import com.sparta.schedulemanager.repository.ScheduleRepository;
+import com.sparta.schedulemanager.exception.ProjectErrorCode;
 import com.sparta.schedulemanager.utility.ProjectProtocol;
 import org.springframework.jdbc.core.JdbcTemplate;
 
@@ -20,12 +22,33 @@ public class ScheduleService {
     }
 
     // ID 기준으로 스케쥴 조회
-    public Schedule getScheduleById(JdbcTemplate jdbcTemplate, int id) {
-        return scheduleRepository.getScheduleById(jdbcTemplate, ProjectProtocol.TABLE_SCHEDULE, id);
+    public Schedule getScheduleById(JdbcTemplate jdbcTemplate, Integer scheduleId) {
+        Schedule foundSchedule = scheduleRepository.getScheduleById(jdbcTemplate, scheduleId);
+
+        if(foundSchedule == null) {
+            throw new CustomException(ProjectErrorCode.ERROR_NOT_EXIST);
+        }
+
+        return foundSchedule;
     }
 
     // 특정 일자 기준으로 스케쥴 조회
     public List<Schedule> getSchedulesByDate(JdbcTemplate jdbcTemplate, String date) {
-        return scheduleRepository.getSchedulesByDate(jdbcTemplate, ProjectProtocol.TABLE_SCHEDULE, date);
+        return scheduleRepository.getSchedulesByDate(jdbcTemplate, date);
+    }
+
+    // 스케쥴 수정하는 함수
+    public Schedule editSchedule(JdbcTemplate jdbcTemplate, Integer scheduleId, Schedule schedule) throws SecurityException, IllegalAccessException, NoSuchFieldException {
+        Schedule foundSchedule = scheduleRepository.getScheduleById(jdbcTemplate, scheduleId);
+
+        if(foundSchedule == null) {
+            throw new CustomException(ProjectErrorCode.ERROR_NOT_EXIST);
+        }
+        else if (!foundSchedule.getPassword().equals(schedule.getPassword())) {
+            throw new CustomException(ProjectErrorCode.ERROE_WRONG_PASSWORD);
+        }
+
+        foundSchedule.editSchedule(schedule);
+        return scheduleRepository.editScheduleData(jdbcTemplate, scheduleId, foundSchedule);
     }
 }

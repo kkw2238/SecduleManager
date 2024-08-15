@@ -6,12 +6,18 @@ import com.sparta.schedulemanager.entity.Schedule;
 import com.sparta.schedulemanager.repository.ScheduleRepository;
 import com.sparta.schedulemanager.secure.SHA256;
 import com.sparta.schedulemanager.service.ScheduleService;
+import com.sparta.schedulemanager.utility.ProjectProtocol;
 import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.security.NoSuchAlgorithmException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api")
@@ -57,9 +63,22 @@ public class ScheduleController {
         return new ScheduleResponseDto(schedule);
     }
 
+    // 특정 일자에 수정된 일정들을 불러오는 함수
     @GetMapping("/schedules")
-    public ScheduleResponseDto getSchedules(@RequestParam String date) {
-        return null;
+    public List<ScheduleResponseDto> getSchedules(@RequestParam String date) {
+        // 입력된 문자열을 yyyyMMdd형태로 파싱
+        Date d = new Date();
+
+        try {
+            d = new SimpleDateFormat(ProjectProtocol.INPUT_DATE_FORMAT).parse(date);
+        } catch (ParseException ex) {
+            System.out.println("Invalid date format");
+        }
+
+        // 파싱된 값을 SQL과 비교하기 쉬운 yyyy-MM-dd 형태로 변환
+        String convertedDate = new SimpleDateFormat(ProjectProtocol.COMPARE_DATE_FORMAT).format(d);
+        return scheduleService.getSchedulesByDate(jdbcTemplate, convertedDate).stream()
+                .map(ScheduleResponseDto::new).toList();
     }
 
     @PutMapping("/schedules/{scheduleId}")

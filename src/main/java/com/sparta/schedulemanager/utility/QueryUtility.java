@@ -1,6 +1,7 @@
 package com.sparta.schedulemanager.utility;
 
 import java.lang.reflect.Field;
+import java.util.Date;
 
 // Query에 대한 Utility를 담당하는 Class
 public class QueryUtility<T> {
@@ -31,10 +32,12 @@ public class QueryUtility<T> {
 
     // 특정 Column값의 데이터를 조회하는 쿼리를 반환해주는 함수
     public String getGetByColumnDataQuery(String table, String columnName, String columnData)  {
-        StringBuilder query = new StringBuilder("SELECT * FROM "
-                + table + " WHERE " + columnName + " = " + columnData
-        );
+        return "SELECT * FROM "
+                + table + " WHERE " + columnName + " = " + columnData;
+    }
 
-        return query.toString();
+    // 특정 시간대의 데이터를 조회하는 쿼리를 반환해주는 함수
+    public String getGetByColumnDateQuery(String table, String columnName, String columnDate)  {
+        return "SELECT * FROM " + table + " WHERE " + "DATE(" + columnName + ") = '" + columnDate + "'";
     }
 }

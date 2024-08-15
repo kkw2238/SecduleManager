@@ -2,6 +2,7 @@ package com.sparta.schedulemanager.entity;
 
 import com.sparta.schedulemanager.dto.ScheduleRequestDto;
 import com.sparta.schedulemanager.secure.SecureAlgorithm;
+import com.sparta.schedulemanager.utility.ProjectProtocol;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -32,12 +33,12 @@ public class Schedule extends CustomEntity {
     }
 
     public Schedule(ResultSet rs) throws SQLException {
-        this.id = rs.getInt("id");
-        this.todo = rs.getString("todo");
-        this.managerName = rs.getString("managername");
-        this.password = rs.getString("password");
-        this.editTime = rs.getString("edittime");
-        this.createTime = rs.getString("createtime");
+        this.id = rs.getInt(ProjectProtocol.TABLE_COLUMN_ID);
+        this.todo = rs.getString(ProjectProtocol.TABLE_COLUMN_TODO);
+        this.managerName = rs.getString(ProjectProtocol.TABLE_COLUMN_MANAGERNAME);
+        this.password = rs.getString(ProjectProtocol.TABLE_COLUMN_PASSWORD);
+        this.editTime = rs.getString(ProjectProtocol.TABLE_COLUMN_EDITTIME);
+        this.createTime = rs.getString(ProjectProtocol.TABLE_COLUMN_CREATETIME);
     }
 
     public void editSchedule(Schedule schedule) {

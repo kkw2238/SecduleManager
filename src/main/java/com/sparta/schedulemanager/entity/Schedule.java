@@ -18,7 +18,7 @@ import java.util.Date;
 @NoArgsConstructor
 public class Schedule extends CustomEntity {
     private String todo;
-    private String managerName;
+    private Integer managerId;
     private String password;
     private String editTime;
     private String createTime;
@@ -26,7 +26,7 @@ public class Schedule extends CustomEntity {
     public Schedule(ScheduleRequestDto requestDto) {
         this.id = 0;
         this.todo = requestDto.getTodo();
-        this.managerName = requestDto.getManagerName();
+        this.managerId = requestDto.getManagerId();
         this.password = requestDto.getPassword();
         this.editTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
         this.createTime = this.editTime;
@@ -35,7 +35,7 @@ public class Schedule extends CustomEntity {
     public Schedule(ResultSet rs) throws SQLException {
         this.id = rs.getInt(ProjectProtocol.TABLE_COLUMN_ID);
         this.todo = rs.getString(ProjectProtocol.TABLE_COLUMN_TODO);
-        this.managerName = rs.getString(ProjectProtocol.TABLE_COLUMN_MANAGERNAME);
+        this.managerId = rs.getInt(ProjectProtocol.TABLE_COLUMN_MANAGER_ID);
         this.password = rs.getString(ProjectProtocol.TABLE_COLUMN_PASSWORD);
         this.editTime = rs.getString(ProjectProtocol.TABLE_COLUMN_EDITTIME);
         this.createTime = rs.getString(ProjectProtocol.TABLE_COLUMN_CREATETIME);
@@ -44,7 +44,7 @@ public class Schedule extends CustomEntity {
     public void editSchedule(Schedule schedule) {
         this.todo = schedule.getTodo();
         this.editTime = schedule.getEditTime();
-        this.managerName = schedule.getManagerName();
+        this.managerId = schedule.getManagerId();
     }
 
     // 비밀번호를 암호화 하는 함수
@@ -54,6 +54,6 @@ public class Schedule extends CustomEntity {
 
     @Override
     public String toString() {
-        return "Id: " + this.id + ", Todo: " + this.todo + ", Manager: " + this.managerName + ", Password: " + this.password + ", Edit: " + this.editTime + ", Create: " + this.createTime;
+        return "Id: " + this.id + ", Todo: " + this.todo + ", Manager: " + this.managerId + ", Password: " + this.password + ", Edit: " + this.editTime + ", Create: " + this.createTime;
     }
 }

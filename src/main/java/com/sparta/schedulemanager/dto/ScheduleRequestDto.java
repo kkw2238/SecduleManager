@@ -7,6 +7,6 @@ import lombok.Getter;
 @AllArgsConstructor
 public class ScheduleRequestDto {
     private String todo;
-    private String managerName;
+    private Integer managerId;
     private String password;
 }

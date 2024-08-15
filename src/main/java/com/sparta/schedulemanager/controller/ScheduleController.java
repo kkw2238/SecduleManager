@@ -80,6 +80,6 @@ public class ScheduleController {
     public Integer deleteSchedule(@PathVariable Integer scheduleId, @RequestBody String password) throws NoSuchAlgorithmException {
         password = new SHA256().encrypt(password);
 
-        return scheduleService.deleteSchedule(jdbcTemplate, scheduleId, password);
+        return Integer.parseInt(scheduleService.deleteSchedule(jdbcTemplate, scheduleId, password));
     }
 }

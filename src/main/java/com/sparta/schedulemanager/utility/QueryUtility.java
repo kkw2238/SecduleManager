@@ -15,9 +15,10 @@ public class QueryUtility<T> {
                 // field의 private데이터에 접근 할 수 있도록 임시 허용
                 field.setAccessible(true);
 
-                query.append(field.getName()).append(", ");
-                values.append("\"").append(field.get(data)).append("\"").append(", ");
-
+                if (field.get(data) != null) {
+                    query.append(field.getName()).append(", ");
+                    values.append("\"").append(field.get(data)).append("\"").append(", ");
+                }
                 // 허용 해제
                 field.setAccessible(false);
             }

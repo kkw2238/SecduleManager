@@ -6,10 +6,13 @@ public class ProjectProtocol {
     public static String COMPARE_DATE_FORMAT = "yyyy-MM-dd";
 
     public static String TABLE_SCHEDULE = "schedule";
+    public static String TABLE_MANAGER = "manager";
+
     public static String TABLE_COLUMN_ID = "id";
+    public static String TABLE_COLUMN_MANAGER_ID = "managerid";
+    public static String TABLE_COLUMN_MANAGER_NAME = "managername";
     public static String TABLE_COLUMN_EDITTIME = "edittime";
     public static String TABLE_COLUMN_TODO = "todo";
-    public static String TABLE_COLUMN_MANAGERNAME = "managername";
     public static String TABLE_COLUMN_PASSWORD = "password";
     public static String TABLE_COLUMN_CREATETIME = "createtime";
 }

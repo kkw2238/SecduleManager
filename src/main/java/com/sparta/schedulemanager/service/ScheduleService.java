@@ -10,10 +10,10 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import java.util.List;
 
 public class ScheduleService {
-    private final ScheduleRepository scheduleRepository;
+    ScheduleRepository scheduleRepository;
 
-    public ScheduleService(ScheduleRepository scheduleRepository) {
-        this.scheduleRepository = scheduleRepository;
+    public ScheduleService(ScheduleRepository repository) {
+        this.scheduleRepository = repository;
     }
 
     // 스케쥴 저장
@@ -53,7 +53,7 @@ public class ScheduleService {
     }
 
     // 스케쥴을 제거하는 함수
-    public Integer deleteSchedule(JdbcTemplate jdbcTemplate, Integer scheduleId, String password) {
+    public String deleteSchedule(JdbcTemplate jdbcTemplate, Integer scheduleId, String password) {
         Schedule foundSchedule = scheduleRepository.getScheduleById(jdbcTemplate, scheduleId);
 
         if(foundSchedule == null) {
@@ -63,6 +63,10 @@ public class ScheduleService {
             throw new CustomException(ProjectErrorCode.ERROE_WRONG_PASSWORD);
         }
 
-        return scheduleRepository.deleteScheduleData(jdbcTemplate, scheduleId);
+        return scheduleRepository.deleteData(jdbcTemplate, ProjectProtocol.TABLE_SCHEDULE, ProjectProtocol.TABLE_COLUMN_ID, String.valueOf(scheduleId));
+    }
+
+    public String deleteSchedulesByManagerId(JdbcTemplate jdbcTemplate, Integer managerId) {
+        return scheduleRepository.deleteData(jdbcTemplate, ProjectProtocol.TABLE_SCHEDULE, ProjectProtocol.TABLE_COLUMN_MANAGER_ID, String.valueOf(managerId));
     }
 }

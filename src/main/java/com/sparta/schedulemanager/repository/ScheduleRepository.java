@@ -65,4 +65,11 @@ public class ScheduleRepository<T extends CustomEntity> {
         id = jdbcTemplate.update(editScheduleQuery);
         return findScheduleById(jdbcTemplate, id);
     }
+
+    // ID에 해당하는 스케쥴을 삭제하는 함수
+    public Integer deleteScheduleData(JdbcTemplate jdbcTemplate, Integer id) {
+        String deleteScheduleQuery = queryUtility.getDeleteByColumnDataQuery(ProjectProtocol.TABLE_SCHEDULE, "id", String.valueOf(id));
+        jdbcTemplate.update(deleteScheduleQuery);
+        return id;
+    }
 }

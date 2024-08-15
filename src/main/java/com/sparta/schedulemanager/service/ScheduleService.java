@@ -51,4 +51,18 @@ public class ScheduleService {
         foundSchedule.editSchedule(schedule);
         return scheduleRepository.editScheduleData(jdbcTemplate, scheduleId, foundSchedule);
     }
+
+    // 스케쥴을 제거하는 함수
+    public Integer deleteSchedule(JdbcTemplate jdbcTemplate, Integer scheduleId, String password) {
+        Schedule foundSchedule = scheduleRepository.getScheduleById(jdbcTemplate, scheduleId);
+
+        if(foundSchedule == null) {
+            throw new CustomException(ProjectErrorCode.ERROR_NOT_EXIST);
+        }
+        else if (!foundSchedule.getPassword().equals(password)) {
+            throw new CustomException(ProjectErrorCode.ERROE_WRONG_PASSWORD);
+        }
+
+        return scheduleRepository.deleteScheduleData(jdbcTemplate, scheduleId);
+    }
 }

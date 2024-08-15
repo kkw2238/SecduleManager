@@ -74,4 +74,12 @@ public class ScheduleController {
 
         return new ScheduleResponseDto(schedule);
     }
+
+    // 스케쥴 삭제하는 함수
+    @DeleteMapping("/schedules/{scheduleId}")
+    public Integer deleteSchedule(@PathVariable Integer scheduleId, @RequestBody String password) throws NoSuchAlgorithmException {
+        password = new SHA256().encrypt(password);
+
+        return scheduleService.deleteSchedule(jdbcTemplate, scheduleId, password);
+    }
 }

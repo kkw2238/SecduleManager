@@ -47,7 +47,7 @@ public class Schedule extends CustomEntity {
         this.managerId = schedule.getManagerId();
     }
 
-    // 비밀번호를 암호화 하는 함수
+    // 비밀번호를 암호화 하는 함수, 추후에 다른 암호화 함수를 사용할 수도 있기에 SecureAlgorithm Class로 확장성 고려
     public void encryptPassword(SecureAlgorithm secureAlgorithm) throws NoSuchAlgorithmException {
         this.password = secureAlgorithm.encrypt(this.password);
     }

@@ -30,6 +30,7 @@ public class ScheduleController {
         this.jdbcTemplate = jdbcTemplate;
     }
 
+    // 스케쥴 추가하는 함수
     @PostMapping("/schedules")
     public ScheduleResponseDto addSchedule(@RequestBody ScheduleRequestDto requestDto) throws NoSuchAlgorithmException, IllegalAccessException {
         Schedule schedule = new Schedule(requestDto);
@@ -61,7 +62,11 @@ public class ScheduleController {
                 .map(ScheduleResponseDto::new).toList();
     }
 
-    // 스케쥴 수정하는 함수
+    /*
+        스케쥴 수정하는 함수
+            비밀번호와 같은 민감 정보는 URL에서 드러내면 안되기에,
+            Body에서 받을 수 있게 API를 설계 했습니다.
+    */
     @PutMapping("/schedules/{scheduleId}")
     public ScheduleResponseDto editSchedule(@PathVariable Integer scheduleId, @RequestBody ScheduleRequestDto requestDto) throws NoSuchFieldException, IllegalAccessException, NoSuchAlgorithmException {
         Schedule schedule = new Schedule(requestDto);

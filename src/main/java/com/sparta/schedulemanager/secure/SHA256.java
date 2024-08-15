@@ -5,6 +5,7 @@ import java.security.NoSuchAlgorithmException;
 
 public class SHA256 implements SecureAlgorithm{
 
+    // SHA-256을 사용하여 암호화
     @Override
     public String encrypt(String plainText) throws NoSuchAlgorithmException {
         MessageDigest digest = MessageDigest.getInstance("SHA-256");
